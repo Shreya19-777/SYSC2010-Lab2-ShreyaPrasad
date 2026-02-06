@@ -2,34 +2,61 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pandas as pd
 
 #Creating the basic GUI template
-class myGUI :
-    def __init__ (self) :
+class GUI:
+    def __init__(self):
         self.window = tk.Tk()
-        self.window.title("SYSC_2010_Lab_2")
-        self.window.geometry("500x300")
-        
-        #Getting the first textbox
-        self.label_1 = tk.Label(self.window, text="CSV File Name", font=('Arial', 10))
-        self.label_1.pack(padx=10, pady=10)
-        self.textbox1 = tk.Text(self.window, height=0.5, font=('Arial', 10))
-        self.textbox1.pack(pady=5, padx=60)
-        
-        self.label2 = tk.Label(self.window, text = "X-axis Column Name", font=('Arial', 10))
-        self.label2.pack()
-        self.textbox2 = tk.Text(self.window, height=0.5, font=('Arial', 10))
-        self.textbox2.pack(pady=5, padx=60)
-        
-        
-        
-        self.button1 = tk.Button(self.window, text="Load & Plot")
-        self.button1.pack()
+        self.window.title("SYSC 2010 Lab 2")
+        self.window.geometry("520x380")
 
-        
-gui = myGUI()
-gui.window.mainloop()
+        tk.Label(self.window, text="CSV File Name", font=('Arial', 11)).pack()
+        self.entry_file = tk.Entry(self.window, width=40, font=('Arial', 11))
+        self.entry_file.pack(pady=4)
+
+        tk.Label(self.window, text="X-axis Column Name", font=('Arial', 11)).pack()
+        self.entry_x = tk.Entry(self.window, width=40, font=('Arial', 11))
+        self.entry_x.pack(pady=4)
+
+        tk.Label(self.window, text="Y-axis Column Name", font=('Arial', 11)).pack()
+        self.entry_y = tk.Entry(self.window, width=40, font=('Arial', 11))
+        self.entry_y.pack(pady=4)
+
+        tk.Button(self.window, text="Load & Plot", font=('Arial', 11, 'bold'),command=self.load_and_plot,width=15).pack()
+
+        self.window.mainloop()
+
+    def load_and_plot(self):
+        filename = self.entry_file.get().strip()
+        col_x = self.entry_x.get().strip()
+        col_y = self.entry_y.get().strip()
+
+        try:
+            df = pd.read_csv(filename)
+            if col_x not in df.columns:
+                raise ValueError(f"Column '{col_x}' not found in CSV")
+            if col_y not in df.columns:
+                raise ValueError(f"Column '{col_y}' not found in CSV")
+
+            plt.plot(df[col_x], df[col_y], color='teal')
+            plt.title(f"{col_y} vs {col_x}")
+            plt.xlabel(col_x)
+            plt.ylabel(col_y)
+            plt.grid(True)
+            plt.tight_layout()
+            plt.show()
+
+        except FileNotFoundError:
+            print("Error", f"File '{filename}' not found")
+        except pd.errors.EmptyDataError:
+            print("Error", "CSV file is empty")
+        except Exception as e:
+            print("Error", str(e))
+
+
+if __name__ == "__main__":
+    app = GUI()
 
 
 
