@@ -32,24 +32,30 @@ plt.ylabel('Subset lead_I')
 #4.3.6 Baseline Removal
 subset_mean = np.mean(ecg_subset['lead_I'])
 ecg_subset['lead_I_centered'] = ecg_subset['lead_I'] - subset_mean
+'''
 #plt.plot(ecg_subset['t'], ecg_subset['lead_I_centered'])
 plt.title('Centered Lead I vs t')
 plt.xlabel('time (s)')
 plt.ylabel('centered lead I')
 #plt.show()
+'''
 
-#choosing an odd and medium value so that you don't have a window size that is too large or too small
+#4.3.7 Smoothing the signal using a window size of 7
 window_size = 7
 smooth_signal = np.convolve(ecg_subset['lead_I_centered'],np.ones(window_size)/window_size,mode='same')
+'''
 plt.plot(ecg_subset['t'], smooth_signal)
 plt.title('Smoothed Signal')
+plt.xlabel('Time')
+plt.ylabel('Smoothed Lead_I')
 plt.show()
-
 '''
-plt.plot(smooth_signal, label='Smoothed')
-plt.plot(ecg_subset['lead_I_centered'], label='Original')
+
+plt.plot(ecg_subset['t'][0:500], ecg_subset['lead_I_centered'].values[0:500], label='Original')
+plt.plot(ecg_subset['t'][0:500], smooth_signal[0:500], label='Smoothed')
 plt.title("Comparison of Smoothed vs Original Segment")
 plt.legend()
 plt.show()
 
-'''
+processed_df = pd.DataFrame({'time': ecg_subset['t'],'lead_I': smooth_signal})
+processed_df.to_csv("processd_ecg.csv", index=False)
