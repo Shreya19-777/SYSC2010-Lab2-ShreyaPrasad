@@ -29,16 +29,16 @@ class GUI:
 
     def load_and_plot(self):
         filename = self.entry_file.get().strip()
-        col_x = self.entry_x.get().strip()
-        col_y = self.entry_y.get().strip()
+        x = self.entry_x.get().strip()
+        y = self.entry_y.get().strip()
 
         try:
             df = pd.read_csv(filename)
 
-            plt.plot(df[col_x], df[col_y], color='teal')
-            plt.title(f"{col_y} vs {col_x}")
-            plt.xlabel(col_x)
-            plt.ylabel(col_y)
+            plt.plot(df[x], df[y], color='teal')
+            plt.title(f"{y} vs {x}")
+            plt.xlabel(x)
+            plt.ylabel(y)
             plt.grid(True)
             plt.tight_layout()
             plt.show()
