@@ -23,7 +23,7 @@ class GUI:
         self.entry_y = tk.Entry(self.window, width=40, font=('Arial', 11))
         self.entry_y.pack(pady=4)
 
-        tk.Button(self.window, text="Load & Plot", font=('Arial', 11, 'bold'),command=self.load_and_plot,width=15).pack()
+        tk.Button(self.window, text="Load & Plot", font=('Arial', 11),command=self.load_and_plot,width=15).pack()
 
         self.window.mainloop()
 
@@ -34,10 +34,6 @@ class GUI:
 
         try:
             df = pd.read_csv(filename)
-            if col_x not in df.columns:
-                raise ValueError(f"Column '{col_x}' not found in CSV")
-            if col_y not in df.columns:
-                raise ValueError(f"Column '{col_y}' not found in CSV")
 
             plt.plot(df[col_x], df[col_y], color='teal')
             plt.title(f"{col_y} vs {col_x}")
@@ -46,17 +42,10 @@ class GUI:
             plt.grid(True)
             plt.tight_layout()
             plt.show()
-
-        except FileNotFoundError:
-            print("Error", f"File '{filename}' not found")
-        except pd.errors.EmptyDataError:
-            print("Error", "CSV file is empty")
+            
         except Exception as e:
             print("Error", str(e))
 
-
 if __name__ == "__main__":
     app = GUI()
-
-
 
